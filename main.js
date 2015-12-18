@@ -37,15 +37,15 @@ function youtubeResultsModel() {
       url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&&q='+searchText+'type=video&key='+key+'&maxResults=50';
     }
     
-    //asynchronous ajax call
+    //asynchronous ajax call to get the results based on the url
     $.ajax({
       'async': true,
       'url': url,
       'dataType': "json",
       'success': function(data) {
+          //sort the returned data alphabetically based on the title of the video
           data.items.sort(function (left, right) { return left.snippet.title == right.snippet.title ? 0 : (left.snippet.title < right.snippet.title ? -1 : 1) });
-          self.youtubeResults(data.items);
-          console.log(data.items);       
+          self.youtubeResults(data.items);     
        },
        'complete': function(data) {
           self.isLoading(false);
@@ -60,58 +60,59 @@ function youtubeResultsModel() {
   // var player;  
 
   self.playVideo = function(object) {
-    var id = object.id.videoId;
-     console.log(object);
-    console.log('id is '+ id);
-    
-    $('#videoModal .modal-dialog').append('<div id="ytplayer"></div>');
+    var id = object.id.videoId; //get the youtube id of the clicked item     
+    $('#videoModal .modal-dialog').append('<div id="ytplayer"></div>'); // append the youtube player div in the modal
 
-    player = new YT.Player('ytplayer', {
+    player = new YT.Player('ytplayer', { //create a new player by passing the id of the item user clicked on
       height: '390',
       width: '640',
       videoId: id
     });
 
-    $('#videoModal').modal('show');
+    $('#videoModal').modal('show'); //show the modal
     $("#videoModal").css('display', 'block');
     
   };
   
   $('#videoModal').on('hidden.bs.modal', function () {
-      player.destroy();
+      player.destroy(); // destroy the youtube player once the modal is closed by the user input
+      $('#ytplayer').remove();
   });
  
 }
 
 $(document).ready(function(){
-  var vm = new youtubeResultsModel();
-  ko.applyBindings(vm);
-  vm.loadPopularVideos();
+  var vm = new youtubeResultsModel(); //create new model
+  ko.applyBindings(vm); // apply bindings to the model 
+  vm.loadPopularVideos(); //load the initial popular videos
   
 });
 
-var menu = (function() {
+var menu = (function() { //fly out menu
 
   function init() {
     
+    //slice creates an empty array. Iterates through the nodelist it is running on and appends the elements of the nodelist to the empty array
     [].slice.call( document.querySelectorAll( '.menu' ) ).forEach( function( el, i ) {
 
+      // select the elements from the dom to work on
       var trigger = el.querySelector( 'div.trigger' ),
         icon = trigger.querySelector( 'span.glyphicon-menu-hamburger' ),
         open = false;
       
-
+      // add event listener on the trigger element
       trigger.addEventListener( 'click', function( event ) {
         if( !open ) {
-          el.className += ' menu-open';
-          $("header").css("transform", "translate3d(26em, 0, 0)");
-          $(".right").css("transform", "translate3d(26em, 0, 0)");
-          $("footer").css("transform", "translate3d(26em, 0, 0)");
+          el.className += ' menu-open'; // add the class menu-open to the div with menu class
+          $("header").css("transform", "translate3d(26em, 0, 0)"); //apply css transforms to the header element
+          $(".right").css("transform", "translate3d(26em, 0, 0)"); //apply css transforms to the right element
+          $("footer").css("transform", "translate3d(26em, 0, 0)"); //apply css transforms to the footer element
           open = true;
         }
       }, false );
 
-      icon.addEventListener( 'click', function( event ) {
+      // add event listener on the icon element
+      icon.addEventListener( 'click', function( event ) { //close the flyout menu and remove the css styles from the header, right, and footer elements
         if( open ) {
           event.stopPropagation();
           open = false;
@@ -130,4 +131,3 @@ var menu = (function() {
   init();
 
 })();
-
