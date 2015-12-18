@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Knockout Js Youtube api</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>	
+	<header class="clearfix">
+				<div id='loading' class="spinner large" data-bind="visible: isLoading"></div>
+
+				<div class="search-container">
+					<div class="title text-center">
+						<h3>Knockout Js / Youtube API</h3>
+					</div>
+
+					<div class="inner-addon left-addon">
+						<i class="glyphicon glyphicon-search"></i>
+						<input id="searcYt" data-bind="event: { keypress: searchYoutube}" type="text" class="form-control search-input" placeholder="Search for videos in YouTube" />	     
+					</div>  
+			  
+					<div class="row buttons text-right">        
+					  <button type="button" class="btn btn-default" data-bind="click: gridView">
+						<span class="glyphicon glyphicon-list"></span>
+					  </button>
+					  <button type="button" class="btn btn-default" data-bind="click: listView">
+						<span class="glyphicon glyphicon-th"></span>
+					  </button>  
+					  
+					</div> 
+				  
+				</div>
+	</header>
+		
+	<div class="main">				
+		<div class="side">
+			<nav class="menu">
+				<div class="trigger"><span class="icon glyphicon glyphicon-menu-hamburger"></span>
+				<a class="label "></a></div>
+				<ul>
+					<li><a class="icon glyphicon glyphicon-user" href="#">Rohit Dhiman</a></li>
+					<li><a class="icon glyphicon glyphicon-camera" href="#">Videos</a></li>
+					<li><a class="icon glyphicon glyphicon-heart" href="#">Favorites</a></li>
+					<li><a class="icon glyphicon glyphicon-bullhorn" href="#">Subscriptions</a></li>
+					<li><a class="icon glyphicon glyphicon-download" href="#">Downloads</a></li>
+					<li><a class="icon glyphicon glyphicon-settings" href="#">Settings</a></li>
+					<li><a class="icon glyphicon glyphicon-switch" href="#">Logout</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div class="right">
+			<div data-bind="template: theTemplate, visible: showResults"></div>
+
+			<script type="text/template" id="results-list-view">
+					
+			   <div class="results-list" data-bind="foreach: youtubeResults">
+					<div class="row" data-bind="click: $parent.playVideo">
+						<div class="video-image col-lg-2">
+							<img class="thumbnail " data-bind="attr:{src: snippet.thumbnails.high.url}, click: $parent.playVideo" />
+						</div>		  
+						<div class="col-lg-10 description">
+							<div class="video-title">
+								<h4 data-bind="text: snippet.title"></h4>
+							</div>
+							<div class="video-description">
+								<span class="glyphicon glyphicon-user"></span>
+								<span class="title"><h5 data-bind="text: snippet.channelTitle"></h5></span>
+								<span class="description"><p data-bind="text: snippet.description"></p></span>
+							</div>
+						</div>			   
+					</div>
+					<hr>
+				</div>	
+			</script>
+  
+			<script type="text/template" id="results-grid-view">
+			 <div class="masonry">
+				<div class="results-grid" data-bind="foreach: youtubeResults">
+					  <div data-bind="click: $parent.playVideo">
+						<div class="item">
+						   <img data-bind="attr:{src: snippet.thumbnails.high.url}, click: $parent.playVideo" />
+							 
+							  <h4 data-bind="text: snippet.title"></h4>
+						</div>
+					  </div>
+				</div>      
+			  </div>	
+			</script>		  
+			
+			<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModal" aria-hidden="true">
+				<div class="modal-dialog">      
+					        
+				</div>
+			</div> 
+		</div>
+	</div> 
+
+	<footer class="clearfix">
+		<p><a href="#">Knockout Js / Youtube Api</a> | <a href="#">Sitemap</a> | <a href="#">Privacy Policy</a></p>
+	</footer> 
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://knockoutjs.com/downloads/knockout-3.3.0.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script>
+		var tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/iframe_api";
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	</script>
+	<script type="text/javascript" src="main.js"></script>
+
+</body>
+</html>
+
